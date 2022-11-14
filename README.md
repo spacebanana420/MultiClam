@@ -1,4 +1,4 @@
-## What is multiclam
+## What is MultiClam
 ClamAV's clamscan singlethreaded utility is fast, but it could be faster if it was multithreaded.
 
 Multiclam creates multiple clamscan instances to divide the scanning work across the desired amount of threads.
