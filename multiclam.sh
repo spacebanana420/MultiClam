@@ -1,5 +1,6 @@
 #!/bin/bash
-# Multi Clam (version 0.3 dev build 1), a shell script that turns ClamAV's clamscan utility multi-threaded
+
+# Multi Clam (version 0.4 dev build 1), a shell script that turns ClamAV's clamscan utility multi-threaded
 # As a dev build, the thread count is set to 6 for testing
 
 threads=0 #Current threads being used
@@ -33,12 +34,20 @@ do
     ((fileamt+=1))
 done
 
+if (( $maxthreads <= 0 )) #Safety check
+then
+    maxthreads=1
+fi
+
 if [[ $manual != yes ]]
 then
     ((maxphase=$fileamt/$maxthreads)) #In auto mode, the amount of files processed per thread depends on both the amount of files and threads
 fi
 
-echo $maxphase
+if (( $maxphase < 30 ))
+then
+    maxphase=30 #Efficiency loss is present at low file counts
+fi
 
 for i in * #Divide the directory's files into segments for scanning. Once each segment is full, it will be scanned
 do
@@ -71,3 +80,4 @@ do
         rm "$i"
     fi
 done
+echo "All is done!"
